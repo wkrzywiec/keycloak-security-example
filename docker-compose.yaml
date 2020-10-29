@@ -2,6 +2,12 @@ version: "3.8"
 
 services:
   
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - 8080:8080
+
   keycloak:
     image: jboss/keycloak:11.0.2
     container_name: keycloak
