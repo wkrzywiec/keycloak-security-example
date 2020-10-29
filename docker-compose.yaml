@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  
+  keycloak:
+    image: jboss/keycloak:11.0.2
+    container_name: keycloak
+    ports:
+      - 9000:8080
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_ADDR=postgres:5432
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+    volumes:
+      - /keycloak:/tmp
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:13.0-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./postgres/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+
+volumes:
+  postgres:
