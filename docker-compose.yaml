@@ -27,8 +27,10 @@ services:
       - DB_DATABASE=keycloak
       - DB_USER=keycloak
       - DB_PASSWORD=keycloak
+      - KEYCLOAK_IMPORT=/tmp/realm-test.json
     volumes:
-      - /keycloak:/tmp
+      - ./keycloak/realm-test.json:/tmp/realm-test.json
+    command: : ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
     depends_on:
       - postgres
 
