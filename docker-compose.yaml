@@ -13,6 +13,11 @@ services:
     container_name: backend
     ports:
       - 8080:8080
+    environment: 
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=test
+    depends_on:
+      - keycloak
 
   keycloak:
     image: jboss/keycloak:11.0.2
@@ -30,7 +35,7 @@ services:
       - KEYCLOAK_IMPORT=/tmp/realm-test.json
     volumes:
       - ./keycloak/realm-test.json:/tmp/realm-test.json
-    command: : ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
+    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
     depends_on:
       - postgres
 
