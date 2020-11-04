@@ -1,4 +1,4 @@
-package io.wkrzywiec.keycloak.backend;
+package io.wkrzywiec.keycloak.backend.movie;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

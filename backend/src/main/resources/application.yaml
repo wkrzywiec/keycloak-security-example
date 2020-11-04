@@ -4,3 +4,9 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_URL}/auth/realms/${KEYCLOAK_REALM}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

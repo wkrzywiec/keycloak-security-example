@@ -1,4 +1,4 @@
-package io.wkrzywiec.keycloak.backend;
+package io.wkrzywiec.keycloak.backend.movie;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
