@@ -14,6 +14,7 @@ services:
     ports:
       - 9000:8080
     environment: 
+      - APP_NAME=movies
       - KEYCLOAK_URL=http://keycloak:8080
       - KEYCLOAK_REALM=test
     depends_on:
@@ -58,6 +59,21 @@ services:
       - 5000:9090
     volumes: 
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:7.3.1
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment: 
+      - PROMETHEUS_URL=http://prometheus:9090
+      - DS_PROMETHEUS=prometheus
+    volumes:
+      - ./grafana/config.ini:/etc/grafana/config.ini
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
 
 volumes:
   postgres:
