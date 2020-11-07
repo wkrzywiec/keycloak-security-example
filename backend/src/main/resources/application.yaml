@@ -1,5 +1,6 @@
 spring:
   security:
+    ignored: "/actuator/**"
     oauth2:
       resourceserver:
         jwt:
