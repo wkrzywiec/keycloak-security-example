@@ -51,5 +51,13 @@ services:
       - postgres:/var/lib/postgresql/data
       - ./postgres:/docker-entrypoint-initdb.d
 
+  prometheus:
+    image: prom/prometheus:v2.22.0
+    container_name: prometheus
+    ports:
+      - 5000:9090
+    volumes: 
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
 volumes:
   postgres:
