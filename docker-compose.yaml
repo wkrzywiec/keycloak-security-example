@@ -58,6 +58,7 @@ services:
     ports:
       - 5000:9090
     volumes: 
+      - prometheus:/prometheus 
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
@@ -77,3 +78,4 @@ services:
 
 volumes:
   postgres:
+  prometheus:
