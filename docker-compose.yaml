@@ -35,7 +35,7 @@ services:
       - DB_PASSWORD=keycloak
       - KEYCLOAK_IMPORT=/tmp/realm-test.json
     volumes:
-      - ./keycloak/realm-test.json:/tmp/realm-test.json
+      - ./infra/keycloak/realm-test.json:/tmp/realm-test.json
     command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
     depends_on:
       - postgres
@@ -50,7 +50,7 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres:/var/lib/postgresql/data
-      - ./postgres:/docker-entrypoint-initdb.d
+      - ./infra/postgres:/docker-entrypoint-initdb.d
 
   prometheus:
     image: prom/prometheus:v2.22.0
@@ -59,7 +59,7 @@ services:
       - 5000:9090
     volumes: 
       - prometheus:/prometheus 
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana:7.3.1
@@ -70,9 +70,9 @@ services:
       - PROMETHEUS_URL=http://prometheus:9090
       - DS_PROMETHEUS=prometheus
     volumes:
-      - ./grafana/config.ini:/etc/grafana/config.ini
-      - ./grafana/provisioning:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./infra/grafana/config.ini:/etc/grafana/config.ini
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
     depends_on:
       - prometheus
 
