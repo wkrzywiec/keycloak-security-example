@@ -1,19 +1,16 @@
-package io.wkrzywiec.keycloak.backend.config;
+package io.wkrzywiec.keycloak.backend.infra.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${spring.security.ignored}")
-    private String[] nonSecureUrl;
+    private String nonSecureUrl;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,6 +26,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .oauth2ResourceServer()
                         .jwt();
-
     }
 }
