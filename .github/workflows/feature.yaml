@@ -3,7 +3,7 @@ name: Feature Branch workflow
 on:
   push:
     branches-ignore:
-      - 'master'
+      - 'main'
       - 'release*'
 
 jobs:
