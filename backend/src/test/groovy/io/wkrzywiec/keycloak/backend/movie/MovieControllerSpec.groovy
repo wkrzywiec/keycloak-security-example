@@ -3,48 +3,42 @@ package io.wkrzywiec.keycloak.backend.movie
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
+import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Specification
 
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
 import java.time.Instant
 
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest
+@AutoConfigureMockMvc
 class MovieControllerSpec extends Specification {
 
-    @LocalServerPort
-    int randomServerPort
-
     @Autowired
-    TestRestTemplate restTemplate
+    private MockMvc mockMvc
 
     String baseUrl
     static String secret = "slFGcSDerewcSDF34cscDSFsde45sSDF"
 
-    def setup(){
-        baseUrl = "http://localhost:" + randomServerPort
-    }
-
     def "Try to get all movies without Authorization header"() {
 
         when: "Make a call without Authorization header"
-        def response = restTemplate.getForEntity(baseUrl + "/movies", String.class)
+        def response = mockMvc.perform(
+                get("/movies"))
+                .andDo(print())
 
         then: "app returns 401 (unauthorized) code"
-        response.getStatusCode() == HttpStatus.UNAUTHORIZED
+        response.andExpect(status().isUnauthorized())
     }
 
     def "Get all movies (with Authorization header)"() {
@@ -53,25 +47,27 @@ class MovieControllerSpec extends Specification {
         def token = generateToken()
 
         and: "Add JWT to request header"
-        HttpHeaders headers = new HttpHeaders()
-        headers.set("Authorization", "Bearer " + token)
-        HttpEntity request = new HttpEntity<>( headers)
+        def request = get("/movies")
+                .header("Authorization", "Bearer " + token)
 
         when: "Make a call without Authorization header"
-        def response = restTemplate.exchange(baseUrl + "/movies", HttpMethod.GET, request, String.class)
+        def response = mockMvc.perform(
+                request)
+                .andDo(print())
 
-
-        then: "app returns 401 (unauthorized) code"
-        response.statusCode == HttpStatus.OK
+        then: "app returns 200 (OK) code"
+        response.andExpect(status().isOk())
     }
 
     def "Try to get a single movie without Authorization header"() {
 
         when: "Make a call without Authorization header"
-        def response = restTemplate.getForEntity(baseUrl + "/movies/1", String.class)
+        def response = mockMvc.perform(
+                get("/movies/1"))
+                .andDo(print())
 
         then: "app returns 401 (unauthorized) code"
-        response.getStatusCode() == HttpStatus.UNAUTHORIZED
+        response.andExpect(status().isUnauthorized())
     }
 
     def "Get a single movie (with Authorization header)"() {
@@ -80,15 +76,16 @@ class MovieControllerSpec extends Specification {
         def token = generateToken()
 
         and: "Add JWT to request header"
-        HttpHeaders headers = new HttpHeaders()
-        headers.set("Authorization", "Bearer " + token)
-        HttpEntity request = new HttpEntity<>( headers)
+        def request = get("/movies/1")
+                .header("Authorization", "Bearer " + token)
 
         when: "Make a call without Authorization header"
-        def response = restTemplate.exchange(baseUrl + "/movies/1", HttpMethod.GET, request, String.class)
+        def response = mockMvc.perform(
+                request)
+                .andDo(print())
 
         then: "app returns 401 (unauthorized) code"
-        response.getStatusCode() == HttpStatus.OK
+        response.andExpect(status().isOk())
     }
 
     private String generateToken() {
