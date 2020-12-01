@@ -24,13 +24,12 @@ public class KeycloakJwkProvider implements JwkProvider {
     private final URL url;
     private final ObjectReader reader;
 
-    public KeycloakJwkProvider(String keycloakUrl) {
+    public KeycloakJwkProvider(String jwkProviderUrl) {
         try {
-            this.url = new URI(keycloakUrl).normalize().toURL();
+            this.url = new URI(jwkProviderUrl).normalize().toURL();
         } catch (MalformedURLException | URISyntaxException e) {
             throw new IllegalArgumentException("Invalid jwks uri", e);
         }
-
         this.reader = new ObjectMapper().readerFor(Map.class);
     }
 

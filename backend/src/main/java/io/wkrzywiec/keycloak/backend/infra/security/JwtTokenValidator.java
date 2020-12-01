@@ -9,9 +9,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPublicKey;
@@ -20,12 +19,11 @@ import java.util.Base64;
 
 import static java.util.Objects.isNull;
 
-@Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtTokenValidator {
 
-    @Value("${keycloak.jwk}")
-    private String jwkProviderUrl;
+    private final JwkProvider jwkProvider;
 
     public AccessToken validateAuthorizationHeader(String authorizationHeader) {
         String tokenValue = subStringBearer(authorizationHeader);
@@ -57,8 +55,7 @@ public class JwtTokenValidator {
 
     private void verifySignature(DecodedJWT decodedJWT) {
         try {
-            JwkProvider provider = new KeycloakJwkProvider(jwkProviderUrl);
-            Jwk jwk = provider.get(decodedJWT.getKeyId());
+            Jwk jwk = jwkProvider.get(decodedJWT.getKeyId());
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
             algorithm.verify(decodedJWT);
         } catch (JwkException ex) {

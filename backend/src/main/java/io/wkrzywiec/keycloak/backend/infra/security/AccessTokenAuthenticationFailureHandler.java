@@ -1,6 +1,5 @@
 package io.wkrzywiec.keycloak.backend.infra.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;

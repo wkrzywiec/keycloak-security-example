@@ -21,7 +21,6 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
     public JwtTokenFilter(
             JwtTokenValidator jwtTokenValidator,
-
             AuthenticationManager authenticationManager,
             AuthenticationFailureHandler authenticationFailureHandler) {
 

@@ -6,11 +6,6 @@ keycloak:
 spring:
   security:
     ignored: "/actuator/**"
-    oauth2:
-      resourceserver:
-        jwt:
-          key-value: "secret"
-          jwk-set-uri: "http://keycloak"
 
 logging:
   level:

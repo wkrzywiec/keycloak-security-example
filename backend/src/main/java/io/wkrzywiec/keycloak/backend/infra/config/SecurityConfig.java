@@ -1,15 +1,18 @@
 package io.wkrzywiec.keycloak.backend.infra.config;
 
+import com.auth0.jwk.JwkProvider;
 import io.wkrzywiec.keycloak.backend.infra.security.AccessTokenAuthenticationFailureHandler;
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenFilter;
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator;
 import io.wkrzywiec.keycloak.backend.infra.security.KeycloakAuthenticationProvider;
+import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,13 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.security.ignored}")
     private String nonSecureUrl;
 
-    private final KeycloakAuthenticationProvider authenticationProvider;
-    private final JwtTokenValidator tokenVerifier;
+    @Value("${keycloak.jwk}")
+    private String jwkProviderUrl;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(new JwtTokenFilter(tokenVerifier, authenticationManagerBean(), authenticationFailureHandler()), BasicAuthenticationFilter.class)
+                .addFilterBefore(
+                        new JwtTokenFilter(
+                                jwtTokenValidator(keycloakJwkProvider()),
+                                authenticationManagerBean(),
+                                authenticationFailureHandler()),
+                        BasicAuthenticationFilter.class)
                 .csrf().disable()
                 .cors()
                 .and()
@@ -54,11 +62,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
+        auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new KeycloakAuthenticationProvider();
     }
 
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return new AccessTokenAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public JwtTokenValidator jwtTokenValidator(JwkProvider jwkProvider) {
+        return new JwtTokenValidator(jwkProvider);
+    }
+
+    @Bean
+    public JwkProvider keycloakJwkProvider() {
+        return new KeycloakJwkProvider(jwkProviderUrl);
     }
 }
