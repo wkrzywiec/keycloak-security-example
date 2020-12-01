@@ -16,7 +16,6 @@ logging:
   level:
     org:
       springframework:
-        web:
-          filter:
-            CommonsRequestLoggingFilter: DEBUG
-        security: DEBUG
+        security: INFO
+      zalando:
+        logbook: TRACE
