@@ -1,14 +1,11 @@
 keycloak:
   url: ${KEYCLOAK_URL}
   realm: ${KEYCLOAK_REALM}
+  jwk: ${keycloak.url}/auth/realms/${keycloak.realm}/protocol/openid-connect/certs
 
 spring:
   security:
     ignored: "/actuator/**"
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${keycloak.url}/auth/realms/${keycloak.realm}/protocol/openid-connect/certs
 
 logging:
   level:
