@@ -1,14 +1,10 @@
 package io.wkrzywiec.keycloak.backend.movie
 
+
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.web.servlet.MockMvc
 import spock.lang.Ignore
 import spock.lang.Specification
-import spock.lang.Subject
 
 import java.time.Instant
 
@@ -16,28 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Subject(MovieController)
 class MovieControllerSpec extends Specification {
-
-    @Autowired
-    private MockMvc mockMvc
-
-    String baseUrl
-    static String secret = "slFGcSDerewcSDF34cscDSFsde45sSDF"
-
-    @Ignore("Different approach for token validation and generation")
-    def "Try to get all movies without Authorization header"() {
-
-        when: "Make a call without Authorization header"
-        def response = mockMvc.perform(
-                get("/movies"))
-                .andDo(print())
-
-        then: "app returns 401 (unauthorized) code"
-        response.andExpect(status().isUnauthorized())
-    }
 
     @Ignore("Different approach for token validation and generation")
     def "Get all movies (with Authorization header)"() {
