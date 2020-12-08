@@ -115,6 +115,10 @@ public class JwtTokenValidator {
     }
 
     private String subStringBearer(String authorizationHeader) {
-        return authorizationHeader.substring(AccessToken.BEARER.length());
+        try {
+            return authorizationHeader.substring(AccessToken.BEARER.length());
+        } catch (Exception ex) {
+            throw new InvalidTokenException("There is no AccessToken in a request header");
+        }
     }
 }
