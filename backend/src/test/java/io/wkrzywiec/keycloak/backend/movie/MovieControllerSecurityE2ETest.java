@@ -1,7 +1,6 @@
 package io.wkrzywiec.keycloak.backend.movie;
 
 import com.auth0.jwk.JwkProvider;
-import io.restassured.RestAssured;
 import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.BindMode;
@@ -26,10 +24,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = {"spring.main.allow-bean-definition-overriding=true"})
 @AutoConfigureMockMvc
 @Testcontainers
-public class MovieControllerSecurityTest {
+public class MovieControllerSecurityE2ETest {
 
     @Container
     private static GenericContainer keycloak = new GenericContainer(DockerImageName.parse("jboss/keycloak:11.0.2"))
@@ -44,7 +42,6 @@ public class MovieControllerSecurityTest {
 
     @Autowired
     private MockMvc mockMvc;
-
 
     @Test
     @DisplayName("Try to get all movies (request without Authorization header)")
@@ -98,8 +95,8 @@ public class MovieControllerSecurityTest {
         return response.extract().body().jsonPath().getString("access_token");
     }
 
-    @Configuration
-    private static class TestConfiguration {
+    @org.springframework.boot.test.context.TestConfiguration
+    static class TestConfiguration {
 
         @Bean
         @Primary

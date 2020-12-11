@@ -53,7 +53,11 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
         chain.doFilter(request, response);
     }
 
-    private String extractAuthorizationHeaderAsString(HttpServletRequest httpServletRequest) {
-        return httpServletRequest.getHeader("Authorization");
+    private String extractAuthorizationHeaderAsString(HttpServletRequest request) {
+        try {
+            return request.getHeader("Authorization");
+        } catch (Exception ex){
+            throw new InvalidTokenException("There is no Authorization header in a request", ex);
+        }
     }
 }
