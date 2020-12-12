@@ -35,7 +35,7 @@ class JwtTokenValidatorSpec extends Specification {
         stubJsonWebKey(keyPair)
 
         and: "Generate correct JWT Access token"
-        def token = generateAccessToken(keyPair, "ADMIN")
+        def token = generateAccessToken(keyPair)
 
         when: "Validate access token"
         def accessToken = validator.validateAuthorizationHeader(AccessToken.BEARER + token)
@@ -54,7 +54,7 @@ class JwtTokenValidatorSpec extends Specification {
         stubJsonWebKey(secondKeyPair)
 
         and: "Generate JWT Access token"
-        def token = generateAccessToken(firstKeyPair, "ADMIN")
+        def token = generateAccessToken(firstKeyPair)
 
         when: "Validate access token"
         validator.validateAuthorizationHeader(AccessToken.BEARER + token)
@@ -84,9 +84,48 @@ class JwtTokenValidatorSpec extends Specification {
         exception.message == 'Token has expired'
     }
 
-    //no role info
-    //no scope info
-    //verify issuer
+    def "Access Token without scope information"() {
+
+        given: "Generate RSA Key Pair"
+        KeyPair keyPair = generateRsaKeyPair()
+        stubJsonWebKey(keyPair)
+
+        and: "Generate JWT Access token"
+        def jwtBuilder = JWT.create()
+                .withExpiresAt(Date.from(Instant.now().plusSeconds(5 * 60)))
+                .withClaim("realm_access", Map.of("roles", List.of('ADMIN')))
+
+        def token = generateAccessToken(keyPair, jwtBuilder)
+
+        when: "Validate access token"
+        validator.validateAuthorizationHeader(AccessToken.BEARER + token)
+
+        then: "Token has invalid signature"
+        def exception = thrown(InvalidTokenException)
+        exception.message == "Token doesn't contain scope information"
+    }
+
+    def "Access Token without user roles information"() {
+
+        given: "Generate RSA Key Pair"
+        KeyPair keyPair = generateRsaKeyPair()
+        stubJsonWebKey(keyPair)
+
+        and: "Generate JWT Access token"
+        def jwtBuilder = JWT.create()
+                .withExpiresAt(Date.from(Instant.now().plusSeconds(5 * 60)))
+                .withClaim("scope", List.of("openid"))
+
+
+        def token = generateAccessToken(keyPair, jwtBuilder)
+
+        when: "Validate access token"
+        validator.validateAuthorizationHeader(AccessToken.BEARER + token)
+
+        then: "Token has invalid signature"
+        def exception = thrown(InvalidTokenException)
+        exception.message == "Token doesn't contain claims with realm roles"
+    }
 
     private KeyPair generateRsaKeyPair() {
 
@@ -104,14 +143,13 @@ class JwtTokenValidatorSpec extends Specification {
         jwkProvider.get(_) >> jwk
     }
 
-    private String generateAccessToken(KeyPair keyPair, String roleName) {
+    private String generateAccessToken(KeyPair keyPair) {
 
         Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic(), keyPair.getPrivate())
         return JWT.create()
-                .withIssuer("http://keycloak")
                 .withExpiresAt(Date.from(Instant.now().plusSeconds(5 * 60)))
                 .withClaim("scope", List.of("openid"))
-                .withClaim("realm_access", Map.of("roles", List.of(roleName)))
+                .withClaim("realm_access", Map.of("roles", List.of('ADMIN')))
                 .sign(algorithm)
     }
 
