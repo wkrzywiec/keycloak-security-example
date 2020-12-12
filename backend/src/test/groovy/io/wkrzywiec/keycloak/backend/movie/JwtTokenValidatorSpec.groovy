@@ -11,12 +11,14 @@ import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator
 import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider
 import spock.lang.Specification
 import spock.lang.Subject
+import spock.lang.Title
 
 import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.spec.RSAKeyGenParameterSpec
 import java.time.Instant
 
+@Title("Token validation rules")
 @Subject(JwtTokenValidator)
 class JwtTokenValidatorSpec extends Specification {
 
