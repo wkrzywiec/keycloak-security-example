@@ -36,11 +36,6 @@ class JwtTokenValidatorSpec extends Specification {
         given: "Generate RSA Key Pair"
         KeyPair keypair = generateRsaKeyPair()
 
-        and: "Stub JSON Web Key (JWK)"
-        def jwk = Stub(Jwk)
-        jwk.getPublicKey() >> keypair.getPublic()
-        jwkProvider.get(_) >> jwk
-
         and: "Generate correct JWT Access token"
         def token = generateAccessToken(keypair, "ADMIN")
 
@@ -98,7 +93,16 @@ class JwtTokenValidatorSpec extends Specification {
         def keygen = KeyPairGenerator.getInstance("RSA")
         RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4)
         keygen.initialize(spec)
-        return keygen.generateKeyPair()
+        KeyPair keyPair = keygen.generateKeyPair()
+
+        stubJsonWebKey(keyPair)
+        return keyPair
+    }
+
+    private void stubJsonWebKey(KeyPair keyPair) {
+        def jwk = Stub(Jwk)
+        jwk.getPublicKey() >> keyPair.getPublic()
+        jwkProvider.get(_) >> jwk
     }
 
     private String generateAccessToken(KeyPair keyPair, String roleName) {
