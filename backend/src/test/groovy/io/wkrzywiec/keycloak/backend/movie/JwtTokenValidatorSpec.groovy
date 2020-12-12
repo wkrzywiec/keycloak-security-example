@@ -3,12 +3,12 @@ package io.wkrzywiec.keycloak.backend.movie
 import com.auth0.jwk.Jwk
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwt.JWT
+import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.algorithms.Algorithm
 import io.wkrzywiec.keycloak.backend.infra.security.AccessToken
 import io.wkrzywiec.keycloak.backend.infra.security.InvalidTokenException
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator
 import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider
-import spock.lang.Ignore
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -16,10 +16,6 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.spec.RSAKeyGenParameterSpec
 import java.time.Instant
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @Subject(JwtTokenValidator)
 class JwtTokenValidatorSpec extends Specification {
@@ -68,9 +64,28 @@ class JwtTokenValidatorSpec extends Specification {
         exception.message == 'Token has invalid signature'
     }
 
+    def "Expired Access Token"() {
+
+        given: "Generate RSA Key Pair"
+        KeyPair keyPair = generateRsaKeyPair()
+        stubJsonWebKey(keyPair)
+
+        and: "Generate JWT Access token"
+        def jwtBuilder = JWT.create()
+                .withExpiresAt(Date.from(Instant.now().minusSeconds(60)))
+
+        def token = generateAccessToken(keyPair, jwtBuilder)
+
+        when: "Validate access token"
+        validator.validateAuthorizationHeader(AccessToken.BEARER + token)
+
+        then: "Token has invalid signature"
+        def exception = thrown(InvalidTokenException)
+        exception.message == 'Token has expired'
+    }
+
     //no role info
     //no scope info
-    //expired token
     //verify issuer
 
     private KeyPair generateRsaKeyPair() {
@@ -98,5 +113,11 @@ class JwtTokenValidatorSpec extends Specification {
                 .withClaim("scope", List.of("openid"))
                 .withClaim("realm_access", Map.of("roles", List.of(roleName)))
                 .sign(algorithm)
+    }
+
+    private String generateAccessToken(KeyPair keyPair, JWTCreator.Builder builder) {
+
+        Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic(), keyPair.getPrivate())
+        return builder.sign(algorithm)
     }
 }
