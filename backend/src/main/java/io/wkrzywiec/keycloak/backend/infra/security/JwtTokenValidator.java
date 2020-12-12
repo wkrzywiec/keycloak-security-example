@@ -42,12 +42,15 @@ public class JwtTokenValidator {
         if (isNull(value)){
             throw new InvalidTokenException("Token has not been provided");
         }
-        return JWT.decode(value);
+        DecodedJWT decodedJWT = JWT.decode(value);
+        log.debug("Token decoded successfully");
+        return decodedJWT;
     }
 
     private void verifyTokenHeader(DecodedJWT decodedJWT) {
         try {
             Preconditions.checkArgument(decodedJWT.getType().equals("JWT"));
+            log.debug("Token's header is correct");
         } catch (IllegalArgumentException ex) {
             throw new InvalidTokenException("Token is not JWT type", ex);
         }
@@ -58,24 +61,28 @@ public class JwtTokenValidator {
             Jwk jwk = jwkProvider.get(decodedJWT.getKeyId());
             Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
             algorithm.verify(decodedJWT);
+            log.debug("Token's signature is correct");
         } catch (JwkException ex) {
             throw new InvalidTokenException("Token has invalid signature", ex);
         }
     }
 
     private void verifyPayload(DecodedJWT decodedJWT) {
-            JsonObject payloadAsJson = decodeTokenPayloadToJsonObject(decodedJWT);
-            if (hasTokenExpired(payloadAsJson)) {
-                throw new InvalidTokenException("Token has expired");
-            }
+        JsonObject payloadAsJson = decodeTokenPayloadToJsonObject(decodedJWT);
+        if (hasTokenExpired(payloadAsJson)) {
+            throw new InvalidTokenException("Token has expired");
+        }
+        log.debug("Token has not expired");
 
-            if (!hasTokenRealmRolesClaim(payloadAsJson)) {
-                throw new InvalidTokenException("Token doesn't contain claims with realm roles");
-            }
+        if (!hasTokenRealmRolesClaim(payloadAsJson)) {
+            throw new InvalidTokenException("Token doesn't contain claims with realm roles");
+        }
+        log.debug("Token's payload contain claims with realm roles");
 
-            if (!hasTokenScopeInfo(payloadAsJson)) {
-                throw new InvalidTokenException("Token doesn't contain scope information");
-            }
+        if (!hasTokenScopeInfo(payloadAsJson)) {
+            throw new InvalidTokenException("Token doesn't contain scope information");
+        }
+        log.debug("Token's payload contain scope information");
     }
 
     private JsonObject decodeTokenPayloadToJsonObject(DecodedJWT decodedJWT) {
