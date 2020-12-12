@@ -5,6 +5,7 @@ import com.auth0.jwk.JwkProvider
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.wkrzywiec.keycloak.backend.infra.security.AccessToken
+import io.wkrzywiec.keycloak.backend.infra.security.InvalidTokenException
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator
 import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider
 import spock.lang.Ignore
@@ -31,13 +32,14 @@ class JwtTokenValidatorSpec extends Specification {
         validator = new JwtTokenValidator(jwkProvider)
     }
 
-    def "Get all movies (with Authorization header)"() {
+    def "Create AccessToken from String value"() {
 
         given: "Generate RSA Key Pair"
-        KeyPair keypair = generateRsaKeyPair()
+        KeyPair keyPair = generateRsaKeyPair()
+        stubJsonWebKey(keyPair)
 
         and: "Generate correct JWT Access token"
-        def token = generateAccessToken(keypair, "ADMIN")
+        def token = generateAccessToken(keyPair, "ADMIN")
 
         when: "Validate access token"
         def accessToken = validator.validateAuthorizationHeader(AccessToken.BEARER + token)
@@ -46,47 +48,30 @@ class JwtTokenValidatorSpec extends Specification {
         accessToken.valueAsString == token
     }
 
-    @Ignore("Different approach for token validation and generation")
-    def "Try to get a single movie without Authorization header"() {
+    def "AccessToken with incorrect signature"() {
 
-        when: "Make a call without Authorization header"
-        def response = mockMvc.perform(
-                get("/movies/1"))
-                .andDo(print())
+        given: "Generate first RSA Key Pair"
+        KeyPair firstKeyPair = generateRsaKeyPair()
 
-        then: "app returns 401 (unauthorized) code"
-        response.andExpect(status().isUnauthorized())
+        and: "Generate second RSA Key Pair"
+        KeyPair secondKeyPair = generateRsaKeyPair()
+        stubJsonWebKey(secondKeyPair)
+
+        and: "Generate JWT Access token"
+        def token = generateAccessToken(firstKeyPair, "ADMIN")
+
+        when: "Validate access token"
+        validator.validateAuthorizationHeader(AccessToken.BEARER + token)
+
+        then: "Token has invalid signature"
+        def exception = thrown(InvalidTokenException)
+        exception.message == 'Token has invalid signature'
     }
 
-    @Ignore("Different approach for token validation and generation")
-    def "Get a single movie (with Authorization header)"() {
-
-        given: "Generate JWT Access token"
-        def token = generateTokenWithRole("VISITOR")
-
-        and: "Add JWT to request header"
-        def request = get("/movies/1")
-                .header("Authorization", "Bearer " + token)
-
-        when: "Make a call without Authorization header"
-        def response = mockMvc.perform(
-                request)
-                .andDo(print())
-
-        then: "app returns 401 (unauthorized) code"
-        response.andExpect(status().isOk())
-    }
-
-
-    private String generateTokenWithRole(String roleName) {
-        Algorithm algorithm = Algorithm.HMAC256(secret)
-        return JWT.create()
-                .withIssuer("http://keycloak")
-                .withExpiresAt(Date.from(Instant.now().plusSeconds(5 * 60)))
-                .withClaim("scope", List.of("openid"))
-                .withClaim("realm_access", Map.of("roles", List.of(roleName)))
-                .sign(algorithm)
-    }
+    //no role info
+    //no scope info
+    //expired token
+    //verify issuer
 
     private KeyPair generateRsaKeyPair() {
 
@@ -95,7 +80,6 @@ class JwtTokenValidatorSpec extends Specification {
         keygen.initialize(spec)
         KeyPair keyPair = keygen.generateKeyPair()
 
-        stubJsonWebKey(keyPair)
         return keyPair
     }
 
