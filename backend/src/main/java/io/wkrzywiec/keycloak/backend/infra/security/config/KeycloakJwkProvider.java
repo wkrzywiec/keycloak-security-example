@@ -1,4 +1,4 @@
-package io.wkrzywiec.keycloak.backend.infra.security;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkException;

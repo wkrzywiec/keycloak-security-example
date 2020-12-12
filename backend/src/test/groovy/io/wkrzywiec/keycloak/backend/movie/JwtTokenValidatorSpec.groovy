@@ -8,7 +8,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import io.wkrzywiec.keycloak.backend.infra.security.AccessToken
 import io.wkrzywiec.keycloak.backend.infra.security.InvalidTokenException
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator
-import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider
+import io.wkrzywiec.keycloak.backend.infra.security.config.KeycloakJwkProvider
 import spock.lang.Specification
 import spock.lang.Subject
 import spock.lang.Title

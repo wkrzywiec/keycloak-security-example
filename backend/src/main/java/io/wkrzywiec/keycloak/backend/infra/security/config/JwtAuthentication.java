@@ -1,5 +1,6 @@
-package io.wkrzywiec.keycloak.backend.infra.security;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
+import io.wkrzywiec.keycloak.backend.infra.security.AccessToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 public class JwtAuthentication extends AbstractAuthenticationToken {

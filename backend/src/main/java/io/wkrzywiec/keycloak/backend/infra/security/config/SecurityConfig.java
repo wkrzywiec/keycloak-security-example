@@ -1,11 +1,7 @@
-package io.wkrzywiec.keycloak.backend.infra.config;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
 import com.auth0.jwk.JwkProvider;
-import io.wkrzywiec.keycloak.backend.infra.security.AccessTokenAuthenticationFailureHandler;
-import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenFilter;
 import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator;
-import io.wkrzywiec.keycloak.backend.infra.security.KeycloakAuthenticationProvider;
-import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

@@ -1,4 +1,4 @@
-package io.wkrzywiec.keycloak.backend.infra.security;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 
-public class AccessTokenAuthenticationFailureHandler implements AuthenticationFailureHandler {
+class AccessTokenAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,

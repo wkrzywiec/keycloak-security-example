@@ -1,5 +1,8 @@
-package io.wkrzywiec.keycloak.backend.infra.security;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
+import io.wkrzywiec.keycloak.backend.infra.security.AccessToken;
+import io.wkrzywiec.keycloak.backend.infra.security.InvalidTokenException;
+import io.wkrzywiec.keycloak.backend.infra.security.JwtTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -15,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
+class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JwtTokenValidator tokenVerifier;
 

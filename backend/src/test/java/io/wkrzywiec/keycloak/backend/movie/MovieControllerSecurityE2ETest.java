@@ -1,7 +1,7 @@
 package io.wkrzywiec.keycloak.backend.movie;
 
 import com.auth0.jwk.JwkProvider;
-import io.wkrzywiec.keycloak.backend.infra.security.KeycloakJwkProvider;
+import io.wkrzywiec.keycloak.backend.infra.security.config.KeycloakJwkProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
-package io.wkrzywiec.keycloak.backend.infra.security;
+package io.wkrzywiec.keycloak.backend.infra.security.config;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 
-public class KeycloakAuthenticationProvider implements AuthenticationProvider {
+class KeycloakAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) {
