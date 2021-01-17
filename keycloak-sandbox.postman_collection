@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "07e1b891-5c6e-411b-a9be-e2e8c3fb16b6",
+		"name": "Keycloak Sandbox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get movies list with Authentication",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "bearer",
+							"type": "string"
+						},
+						{
+							"key": "accessToken",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnOElfZEtlcHRXQzg4X3QzanlZdVRXdmFpS0FnQ1lkVjJaSzFadmlwUEhvIn0.eyJleHAiOjE2MDY4MDQ4ODAsImlhdCI6MTYwNjgwNDU4MCwianRpIjoiYjJlNzE3ZmEtZTdhNi00NWRlLWI2MWUtMzU3YjJhMGY4MGI4IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvYXV0aC9yZWFsbXMvdGVzdCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIyN2Q1YjIyNS0xNDk3LTQ3M2YtOWQyMi03NzJhZGZiYzE0YmYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJiYWNrZW5kIiwic2Vzc2lvbl9zdGF0ZSI6IjRhYWRjMmQxLTg2ODMtNDY1ZS1iMzkxLTdhYzFmMmU2MzRkMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJWSVNJVE9SIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIYW4gU29sbyIsInByZWZlcnJlZF91c2VybmFtZSI6ImhhbiIsImdpdmVuX25hbWUiOiJIYW4iLCJmYW1pbHlfbmFtZSI6IlNvbG8iLCJlbWFpbCI6Imhhbi5zb2xvQHNtdWdnbGVycy5jb20ifQ.iQFOiWVclc2QEM_pBm41mEm4-3F8T8Nz602BuipulUhbeSTr2-FqUtyE5DytT7NkveACwzjWDesoVjTG4gPFss8e6d_tYHFBhVqclrT8MmwWGdJbvjVXBzf9xQ7KDvyZpTYtr7QE50rMWMkhAyXUQ1kYGfR3y3ql3-Yw_ybfvgcCyKLutd2PLMyDVVJrgEVSP7RiednGznsJ3J-O8mqlkh56UnlbseBZntD1bujgf4rNGoIn0USvk4gnm4ve2pR1BAgzYhuT6mlNjBEV2PU84pK7bOLBeIOCObiaIlqDnTtty-V6J96rOGrv53ZiXNO85XIyvSCEspNIGvvSLm8ddg",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "token",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "http://keycloak:8080/auth/realms/test/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "han",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "372d2f4b-c498-4b7e-a7ac-85c73a26eaad",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "backend",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnOElfZEtlcHRXQzg4X3QzanlZdVRXdmFpS0FnQ1lkVjJaSzFadmlwUEhvIn0.eyJleHAiOjE2MDY3NTU5ODUsImlhdCI6MTYwNjc1NTY4NSwianRpIjoiZGY3MmE1MGQtMzE1Yy00ZTA2LWJjOTktZmNkYWYxNjUwZDFjIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvYXV0aC9yZWFsbXMvdGVzdCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIyN2Q1YjIyNS0xNDk3LTQ3M2YtOWQyMi03NzJhZGZiYzE0YmYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJiYWNrZW5kIiwic2Vzc2lvbl9zdGF0ZSI6ImM2OTEwNzczLWZjM2EtNGQ1Ny04M2E2LTgyYmFkNjRjMGFmYiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJWSVNJVE9SIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIYW4gU29sbyIsInByZWZlcnJlZF91c2VybmFtZSI6ImhhbiIsImdpdmVuX25hbWUiOiJIYW4iLCJmYW1pbHlfbmFtZSI6IlNvbG8iLCJlbWFpbCI6Imhhbi5zb2xvQHNtdWdnbGVycy5jb20ifQ.ElPETo8Aqa6nD9ZCygsIwnpFw9vZv3nBgMlFZXpdE0VLc741y4PbZBSbfIKJNFuw0o3u6s7sw3j5r975PnP-m0vO2K_9598CfpZNzspBT8s9f9ZQO6aM4fM7SoWacNn1tcxNYPbDWYJhfLyuELlWnFSI7yM8W1E_PijnCrkvMv1agjDhYFpt6KcfNWK_tmk2JsHdWlaqwCP_2wdIjw0ZcGv9lwdFI2lITmeKAMpcgWfOE-q9fO3RG8_ZYmiOnuYCAQKig0PbgjyCyTNqfUOOdbhqNChYNV056zKzB69v0XkX0449mIplGqoLyY8iMXS9ooYBHxiCSy1mTp8ZAPavsQ"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/movies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tokens - Passoword grant type",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "frontend",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "0a1fc2d0-8582-41e9-b918-682fc81eb54d",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "luke",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://keycloak:8080/auth/realms/test/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"keycloak"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"test",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tokens - Client credentials grant type",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "openid",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "frontend",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "0a1fc2d0-8582-41e9-b918-682fc81eb54d",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "han",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://keycloak:8080/auth/realms/test/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"keycloak"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"realms",
+						"test",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
