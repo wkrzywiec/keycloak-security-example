@@ -62,7 +62,7 @@ services:
       - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
-    image: grafana/grafana:7.3.1
+    image: grafana/grafana:6.7.5
     container_name: grafana
     ports:
       - 3000:3000

@@ -5,7 +5,7 @@ keycloak:
 
 spring:
   security:
-    ignored: "/actuator/**"
+    ignored: "/actuator/**,/actuator/prometheus"
 
 logging:
   level:
