@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: prod
+
+keycloak:
+  url: ${KEYCLOAK_URL}
+  realm: ${KEYCLOAK_REALM}
+
+management:
+  metrics:
+    tags:
+      application: ${APP_NAME}

@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8081
+
+keycloak:
+  url: http://localhost:8080
+  realm: test
+
+management:
+  metrics:
+    tags:
+      application: movies-backend

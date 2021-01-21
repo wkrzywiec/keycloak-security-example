@@ -1,11 +1,11 @@
-keycloak:
-  url: ${KEYCLOAK_URL}
-  realm: ${KEYCLOAK_REALM}
-  jwk: ${keycloak.url}/auth/realms/${keycloak.realm}/protocol/openid-connect/certs
-
 spring:
+  profiles:
+    active: @active-profiles@
   security:
-    ignored: "/actuator/**,/actuator/prometheus"
+    ignored: "/actuator/**"
+
+keycloak:
+  jwk: ${keycloak.url}/auth/realms/${keycloak.realm}/protocol/openid-connect/certs
 
 logging:
   level:
@@ -20,6 +20,3 @@ management:
     web:
       exposure:
         include: "*"
-  metrics:
-    tags:
-      application: ${APP_NAME}
