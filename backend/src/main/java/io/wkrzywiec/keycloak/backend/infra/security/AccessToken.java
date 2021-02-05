@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,6 +19,7 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.isNull;
 
 @RequiredArgsConstructor
+@ToString
 public class AccessToken {
 
     public static final String BEARER = "Bearer ";

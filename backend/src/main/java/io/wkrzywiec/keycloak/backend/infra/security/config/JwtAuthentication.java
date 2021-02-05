@@ -1,8 +1,10 @@
 package io.wkrzywiec.keycloak.backend.infra.security.config;
 
 import io.wkrzywiec.keycloak.backend.infra.security.AccessToken;
+import lombok.ToString;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
+@ToString
 public class JwtAuthentication extends AbstractAuthenticationToken {
 
     private final AccessToken accessToken;

@@ -10,24 +10,23 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.google.common.collect.Lists;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Map;
 
 public class KeycloakJwkProvider implements JwkProvider {
 
-    private final URL url;
+    private final URI uri;
     private final ObjectReader reader;
 
     public KeycloakJwkProvider(String jwkProviderUrl) {
         try {
-            this.url = new URI(jwkProviderUrl).normalize().toURL();
-        } catch (MalformedURLException | URISyntaxException e) {
+            this.uri = new URI(jwkProviderUrl).normalize();
+        } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Invalid jwks uri", e);
         }
         this.reader = new ObjectMapper().readerFor(Map.class);
@@ -46,15 +45,15 @@ public class KeycloakJwkProvider implements JwkProvider {
                 }
             }
         }
-        throw new SigningKeyNotFoundException("No key found in " + url.toString() + " with kid " + keyId, null);
+        throw new SigningKeyNotFoundException("No key found in " + uri.toString() + " with kid " + keyId, null);
     }
 
     private List<Jwk> getAll() throws SigningKeyNotFoundException {
         List<Jwk> jwks = Lists.newArrayList();
-        @SuppressWarnings("unchecked") final List<Map<String, Object>> keys = (List<Map<String, Object>>) getJwks().get("keys");
+        final List<Map<String, Object>> keys = (List<Map<String, Object>>) getJwks().get("keys");
 
         if (keys == null || keys.isEmpty()) {
-            throw new SigningKeyNotFoundException("No keys found in " + url.toString(), null);
+            throw new SigningKeyNotFoundException("No keys found in " + uri.toString(), null);
         }
 
         try {
@@ -69,15 +68,20 @@ public class KeycloakJwkProvider implements JwkProvider {
 
     private Map<String, Object> getJwks() throws SigningKeyNotFoundException {
         try {
-            final URLConnection c = this.url.openConnection();
 
-            c.setRequestProperty("Accept", "application/json");
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(this.uri)
+                    .headers("Accept", "application/json")
+                    .GET()
+                    .build();
 
-            try (InputStream inputStream = c.getInputStream()) {
-                return reader.readValue(inputStream);
-            }
-        } catch (IOException e) {
-            throw new NetworkException("Cannot obtain jwks from url " + url.toString(), e);
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return reader.readValue(response.body());
+
+        } catch (IOException | InterruptedException e) {
+            throw new NetworkException("Cannot obtain jwks from url " + uri.toString(), e);
         }
     }
 }

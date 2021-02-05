@@ -57,7 +57,7 @@ public class MovieControllerSecurityE2ETest {
     @DisplayName("Get all movies (request with Authorization header)")
     void getAllMoviesWithAuthorizationHeader() throws Exception {
 
-        String accessToken = fetchAccessToken();
+        String accessToken = fetchAccessToken("ADMIN");
 
         mockMvc.perform(
                 get("/movies")
@@ -66,16 +66,44 @@ public class MovieControllerSecurityE2ETest {
                 .andExpect(status().isOk());
     }
 
-    private String fetchAccessToken() {
+    @Test
+    @DisplayName("Get a single movie (request with Authorization header)")
+    void getSingleMovieWithAuthorizationHeader() throws Exception {
+
+        String accessToken = fetchAccessToken("VISITOR");
+
+        mockMvc.perform(
+                get("/movies/1")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Try to get a single movie having wrong role (request with Authorization header)")
+    void getSingleHavingIncorrectUserRole() throws Exception {
+
+        String accessToken = fetchAccessToken("VISITOR");
+
+        mockMvc.perform(
+                get("/movies")
+                        .header("Authorization", "Bearer " + accessToken))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    private String fetchAccessToken(String role) {
+
+        String username = role.equals("ADMIN") ? "han" : "luke";
 
         String keycloakUrl = "http://" + keycloak.getHost() + ":" + keycloak.getMappedPort(8080) + "/auth/realms/test";
 
         Map<String, String> formParams = Map.of(
                 "grant_type", "password",
                 "scope", "openid",
-                "client_id", "backend",
-                "client_secret", "372d2f4b-c498-4b7e-a7ac-85c73a26eaad",
-                "username", "han",
+                "client_id", "frontend",
+                "client_secret", "8ebfc90a-cc20-43b1-b998-f87c75c7f217",
+                "username", username,
                 "password", "password"
         );
 

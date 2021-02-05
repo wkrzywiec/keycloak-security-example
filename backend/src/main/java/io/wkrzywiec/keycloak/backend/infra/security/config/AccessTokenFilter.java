@@ -18,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
+class AccessTokenFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JwtTokenValidator tokenVerifier;
 
-    public JwtTokenFilter(
+    public AccessTokenFilter(
             JwtTokenValidator jwtTokenValidator,
             AuthenticationManager authenticationManager,
             AuthenticationFailureHandler authenticationFailureHandler) {
@@ -41,7 +41,8 @@ class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
         String authorizationHeader = extractAuthorizationHeaderAsString(request);
         AccessToken accessToken = tokenVerifier.validateAuthorizationHeader(authorizationHeader);
-        return new JwtAuthentication(accessToken);
+        return this.getAuthenticationManager()
+                .authenticate(new JwtAuthentication(accessToken));
     }
 
     @Override

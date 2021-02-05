@@ -6,8 +6,7 @@ import org.springframework.security.core.Authentication;
 class KeycloakAuthenticationProvider implements AuthenticationProvider {
 
     @Override
-    public Authentication authenticate(Authentication authentication) {
-        return authentication;
+    public Authentication authenticate(Authentication authentication) { return authentication;
     }
 
     @Override

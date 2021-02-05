@@ -18,7 +18,7 @@
 		<java.version>11</java.version>
 		<spring.boot.dependencies.version>2.3.4.RELEASE</spring.boot.dependencies.version>
 		<spock.dependencies.version>1.3-groovy-2.5</spock.dependencies.version>
-		<testcontainers.dependencies.version>1.15.0</testcontainers.dependencies.version>
+		<testcontainers.dependencies.version>1.15.1</testcontainers.dependencies.version>
 		<restassured.dependencies.version>4.2.0</restassured.dependencies.version>
 	</properties>
 
@@ -39,6 +39,11 @@
 			<version>${spring.boot.dependencies.version}</version>
 			<scope>runtime</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+			<version>${spring.boot.dependencies.version}</version>
 		</dependency>
 
 		<!-- OAuth 2.0 dependencies -->
