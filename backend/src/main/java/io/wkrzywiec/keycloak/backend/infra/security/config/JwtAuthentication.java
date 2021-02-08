@@ -16,11 +16,11 @@ public class JwtAuthentication extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return accessToken.getValueAsString();
     }
 
     @Override
     public Object getPrincipal() {
-        return accessToken.getValueAsString();
+        return accessToken.getUsername();
     }
 }

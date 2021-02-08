@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -31,14 +32,26 @@ public class AccessToken {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        DecodedJWT decodedJWT = decodeToken(value);
-        JsonObject payloadAsJson = decodeTokenPayloadToJsonObject(decodedJWT);
+        JsonObject payloadAsJson = getPayloadAsJsonObject();
 
-       return StreamSupport.stream(
+        return StreamSupport.stream(
                 payloadAsJson.getAsJsonObject("realm_access").getAsJsonArray("roles").spliterator(), false)
                 .map(JsonElement::getAsString)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    public String getUsername() {
+        JsonObject payloadAsJson = getPayloadAsJsonObject();
+
+        return Optional.ofNullable(
+                payloadAsJson.getAsJsonPrimitive("preferred_username").getAsString())
+                .orElse("");
+    }
+
+    private JsonObject getPayloadAsJsonObject() {
+        DecodedJWT decodedJWT = decodeToken(value);
+        return decodeTokenPayloadToJsonObject(decodedJWT);
     }
 
     private DecodedJWT decodeToken(String value) {

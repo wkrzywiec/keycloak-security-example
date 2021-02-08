@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -36,6 +37,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .cors()
+                .and()
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .addFilterBefore(
                         new AccessTokenFilter(
@@ -80,5 +84,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwkProvider keycloakJwkProvider() {
         return new KeycloakJwkProvider(jwkProviderUrl);
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new AuthorizationAccessDeniedHandler();
     }
 }

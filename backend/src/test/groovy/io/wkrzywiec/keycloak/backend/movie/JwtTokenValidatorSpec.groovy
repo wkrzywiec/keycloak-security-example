@@ -15,6 +15,8 @@ import spock.lang.Title
 
 import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.interfaces.RSAPrivateKey
+import java.security.interfaces.RSAPublicKey
 import java.security.spec.RSAKeyGenParameterSpec
 import java.time.Instant
 
@@ -129,7 +131,7 @@ class JwtTokenValidatorSpec extends Specification {
         exception.message == "Token doesn't contain claims with realm roles"
     }
 
-    private KeyPair generateRsaKeyPair() {
+    private static KeyPair generateRsaKeyPair() {
 
         def keygen = KeyPairGenerator.getInstance("RSA")
         RSAKeyGenParameterSpec spec = new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4)
@@ -145,9 +147,9 @@ class JwtTokenValidatorSpec extends Specification {
         jwkProvider.get(_) >> jwk
     }
 
-    private String generateAccessToken(KeyPair keyPair) {
+    private static String generateAccessToken(KeyPair keyPair) {
 
-        Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic(), keyPair.getPrivate())
+        Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic() as RSAPublicKey, keyPair.getPrivate() as RSAPrivateKey)
         return JWT.create()
                 .withExpiresAt(Date.from(Instant.now().plusSeconds(5 * 60)))
                 .withClaim("scope", List.of("openid"))
@@ -155,9 +157,9 @@ class JwtTokenValidatorSpec extends Specification {
                 .sign(algorithm)
     }
 
-    private String generateAccessToken(KeyPair keyPair, JWTCreator.Builder builder) {
+    private static String generateAccessToken(KeyPair keyPair, JWTCreator.Builder builder) {
 
-        Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic(), keyPair.getPrivate())
+        Algorithm algorithm = Algorithm.RSA256(keyPair.getPublic() as RSAPublicKey, keyPair.getPrivate() as RSAPrivateKey)
         return builder.sign(algorithm)
     }
 }

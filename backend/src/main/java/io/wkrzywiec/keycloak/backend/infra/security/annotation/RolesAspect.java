@@ -1,6 +1,5 @@
 package io.wkrzywiec.keycloak.backend.infra.security.annotation;
 
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -19,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Aspect
 @Component
-@Slf4j
 public class RolesAspect {
 
     @Before("@annotation(io.wkrzywiec.keycloak.backend.infra.security.annotation.AllowedRoles)")
