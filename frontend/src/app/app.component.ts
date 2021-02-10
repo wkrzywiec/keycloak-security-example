@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-export interface Movie {
-  title: string;
-  director: string;
-  year: number;
-}
+import { Movie, MovieBackendService } from './services/movie-backend.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +17,9 @@ export class AppComponent {
   ]
   displayedColumns: string[] = ['title', 'director', 'year'];  
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    private backend: MovieBackendService,
+    private snackBar: MatSnackBar) {}
 
   displayError() {
     this.snackBar.open('Unauthorized request', 'Close', { duration: 2000})
