@@ -2,12 +2,12 @@
   <h1 style="color: white">Movies database</h1>
   <div class="row">
     <div class="col-2" align="center">
-      <button mat-raised-button color="primary" flex="150" (click)="displayError()">All movies</button>
+      <button mat-raised-button color="primary" flex="150" (click)="getAllMovies()">All movies</button>
     </div>
     <div class="col-1">
       <mat-form-field appearance="fill">
         <mat-label>Select movie id</mat-label>
-        <mat-select>
+        <mat-select (selectionChange)="onMovieIdChange($event)">
           <mat-option value="1">1</mat-option>
           <mat-option value="2">2</mat-option>
           <mat-option value="3">3</mat-option>

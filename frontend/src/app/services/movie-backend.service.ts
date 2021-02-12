@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,6 +6,13 @@ export interface Movie {
   title: string;
   director: string;
   year: number;
+}
+
+export interface Problem {
+  code: number;
+  reason: string;
+  timestamp: string;
+  message: string;
 }
 
 @Injectable({
