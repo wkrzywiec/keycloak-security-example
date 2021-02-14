@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,10 +10,25 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { AppRoutingModule } from './app-routing.module';
+import { ContentComponent } from './component/content/content.component';
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080/auth',
+        realm: 'test',
+        clientId: 'frontend',
+      }
+    });
+}
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ContentComponent
   ],
   imports: [
     BrowserModule,
@@ -24,9 +39,18 @@ import { HttpClientModule } from '@angular/common/http';
     MatTableModule,
     MatSnackBarModule,
     HttpClientModule,
-    NgbModule
+    KeycloakAngularModule,
+    NgbModule,
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService],
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
