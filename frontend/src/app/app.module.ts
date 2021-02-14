@@ -13,17 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { ContentComponent } from './component/content/content.component';
+import { initializeKeycloak } from './init/keycloak-init.factory';
 
-function initializeKeycloak(keycloak: KeycloakService) {
-  return () =>
-    keycloak.init({
-      config: {
-        url: 'http://localhost:8080/auth',
-        realm: 'test',
-        clientId: 'frontend',
-      }
-    });
-}
+
 
 @NgModule({
   declarations: [
