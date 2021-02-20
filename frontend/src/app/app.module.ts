@@ -14,6 +14,7 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { ContentComponent } from './component/content/content.component';
 import { initializeKeycloak } from './init/keycloak-init.factory';
+import { ConfigInitService } from './init/config-init.service';
 
 
 
@@ -36,6 +37,7 @@ import { initializeKeycloak } from './init/keycloak-init.factory';
     AppRoutingModule
   ],
   providers: [
+    ConfigInitService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,

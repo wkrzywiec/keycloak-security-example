@@ -5,6 +5,10 @@ services:
   frontend:
     build: ./frontend
     container_name: frontend
+    environment: 
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=test
+      - KEYCLOAK_CLIENT_ID=frontend
     ports:
       - 80:80
 
@@ -33,10 +37,11 @@ services:
       - DB_DATABASE=keycloak
       - DB_USER=keycloak
       - DB_PASSWORD=keycloak
-      - KEYCLOAK_IMPORT=/tmp/realm-test.json
+      # - KEYCLOAK_IMPORT=/tmp/realm-test.json
     volumes:
-      - ./infra/keycloak/realm-test.json:/tmp/realm-test.json
-    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
+      - ./:/temp
+      # - ./infra/keycloak/realm-test.json:/tmp/realm-test.json
+    # command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
     depends_on:
       - postgres
 
