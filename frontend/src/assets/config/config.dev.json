@@ -1,5 +1,0 @@
-{
-    "KEYCLOAK_URL": "http://localhost:8080/auth",
-    "KEYCLOAK_REALM": "test",
-    "KEYCLOAK_CLIENT_ID": "frontend"
-}
