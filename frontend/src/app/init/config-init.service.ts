@@ -13,38 +13,18 @@ export class ConfigInitService {
   private readonly devConfigFilePath = 'assets/config/config.dev.json';
   private config: any;
 
-  private readonly keyclaokUrl: string;
-  private readonly keycloakRealm: string;
-  private readonly clientId: string;
+  constructor(private httpClient: HttpClient) {}
 
-  constructor(private httpClient: HttpClient) {
-      this.getConfig();
-      console.log(this.config)
-      
-      this.keyclaokUrl = this.getValue('KEYCLOAK_URL');
-      this.keycloakRealm = this.getValue('KEYCLOAK_REALM');
-      this.clientId = this.getValue('KEYCLOAK_CLIENT_ID');
-   }
-
-  public getKeycloakUrl() {
-    return this.keyclaokUrl;
-  }
-
-  public getKeycloakRealm() {
-    return this.keycloakRealm;
-  }
-
-  public getKeycloakClientId() {
-    return this.clientId;
-  }
-
-  private getConfig(): Observable<any> {
+  public getConfig(): Observable<any> {
     return this.httpClient
         .get(this.getConfigFile(), {
           observe: 'response',
         })
         .pipe(
-          catchError((error) => of(null)),
+          catchError((error) => {
+            console.log(error)
+            return of(null)
+          } ),
           mergeMap((response) => {
             if (response && response.body) {
               this.config = response.body;
@@ -52,22 +32,10 @@ export class ConfigInitService {
             } else {
               return of(null);
             }
-          })
-        );
+          }));
   }
 
   private getConfigFile(): string {
     return environment.production ? this.prodConfigFilePath : this.devConfigFilePath;
-  }
-
-  private getValue(key: string): any {
-    return this.getConfig().pipe(
-      mergeMap((config) => {
-        if (config) {
-          return config[key];
-        }
-        return null;
-      })
-    );
   }
 }

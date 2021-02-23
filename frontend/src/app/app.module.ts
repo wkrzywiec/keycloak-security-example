@@ -42,7 +42,7 @@ import { ConfigInitService } from './init/config-init.service';
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
       multi: true,
-      deps: [KeycloakService],
+      deps: [KeycloakService, ConfigInitService],
     }
   ],
   bootstrap: [AppComponent]
