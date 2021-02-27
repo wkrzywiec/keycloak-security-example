@@ -6,11 +6,12 @@ services:
     build: ./frontend
     container_name: frontend
     environment: 
-      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_URL=http://keycloak:8080/auth
       - KEYCLOAK_REALM=test
       - KEYCLOAK_CLIENT_ID=frontend
+      - BACKEND_BASE_PATH=http://localhost:9000
     ports:
-      - 80:80
+      - 4200:80
 
   backend:
     build: ./backend
