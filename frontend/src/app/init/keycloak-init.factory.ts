@@ -15,7 +15,7 @@ export function initializeKeycloak(
 
             return fromPromise(keycloak.init({
               config: {
-                url: config['KEYCLOAK_URL'],
+                url: config['KEYCLOAK_URL'] + '/auth',
                 realm: config['KEYCLOAK_REALM'],
                 clientId: config['KEYCLOAK_CLIENT_ID'],
               }

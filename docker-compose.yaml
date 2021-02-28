@@ -5,19 +5,23 @@ services:
   frontend:
     build: ./frontend
     container_name: frontend
+    ports:
+      - 4200:80
     environment: 
-      - KEYCLOAK_URL=http://keycloak:8080/auth
+      - KEYCLOAK_URL=http://keycloak:8080
       - KEYCLOAK_REALM=test
       - KEYCLOAK_CLIENT_ID=frontend
       - BACKEND_BASE_PATH=http://localhost:9000
-    ports:
-      - 4200:80
+    depends_on:
+      - keycloak
+      - backend
+    
 
   backend:
     build: ./backend
     container_name: backend
     ports:
-      - 9000:8080
+      - 9000:9000
     environment: 
       - APP_NAME=movies-app
       - KEYCLOAK_URL=http://keycloak:8080
@@ -38,11 +42,11 @@ services:
       - DB_DATABASE=keycloak
       - DB_USER=keycloak
       - DB_PASSWORD=keycloak
-      # - KEYCLOAK_IMPORT=/tmp/realm-test.json
+      - KEYCLOAK_IMPORT=/tmp/realm-test.json
     volumes:
-      - ./:/temp
-      # - ./infra/keycloak/realm-test.json:/tmp/realm-test.json
-    # command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
+      # - ./:/temp
+      - ./infra/keycloak/realm-test.json:/tmp/realm-test.json
+    command: ["-Dkeycloak.profile.feature.upload_scripts=enabled"]
     depends_on:
       - postgres
 
@@ -58,29 +62,29 @@ services:
       - postgres:/var/lib/postgresql/data
       - ./infra/postgres:/docker-entrypoint-initdb.d
 
-  prometheus:
-    image: prom/prometheus:v2.22.0
-    container_name: prometheus
-    ports:
-      - 5000:9090
-    volumes: 
-      - prometheus:/prometheus 
-      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  # prometheus:
+  #   image: prom/prometheus:v2.22.0
+  #   container_name: prometheus
+  #   ports:
+  #     - 5000:9090
+  #   volumes: 
+  #     - prometheus:/prometheus 
+  #     - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  grafana:
-    image: grafana/grafana:6.7.5
-    container_name: grafana
-    ports:
-      - 3000:3000
-    environment: 
-      - PROMETHEUS_URL=http://prometheus:9090
-      - DS_PROMETHEUS=prometheus
-    volumes:
-      - ./infra/grafana/config.ini:/etc/grafana/config.ini
-      - ./infra/grafana/provisioning:/etc/grafana/provisioning
-      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
-    depends_on:
-      - prometheus
+  # grafana:
+  #   image: grafana/grafana:6.7.5
+  #   container_name: grafana
+  #   ports:
+  #     - 3000:3000
+  #   environment: 
+  #     - PROMETHEUS_URL=http://prometheus:9090
+  #     - DS_PROMETHEUS=prometheus
+  #   volumes:
+  #     - ./infra/grafana/config.ini:/etc/grafana/config.ini
+  #     - ./infra/grafana/provisioning:/etc/grafana/provisioning
+  #     - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
+  #   depends_on:
+  #     - prometheus
 
 volumes:
   postgres:

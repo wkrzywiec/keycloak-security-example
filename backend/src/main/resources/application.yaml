@@ -4,6 +4,9 @@ spring:
   security:
     ignored: "/actuator/**"
 
+server:
+  port: 9000
+
 keycloak:
   jwk: ${keycloak.url}/auth/realms/${keycloak.realm}/protocol/openid-connect/certs
 
