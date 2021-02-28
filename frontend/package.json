@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config src/assets/proxy.conf.dev.json",
-    "build": "ng build",
+    "start": "ng serve --proxy-config src/assets/proxy.conf.dev.json -c dev",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -25,6 +25,8 @@
     "@angular/router": "~11.0.1",
     "@ng-bootstrap/ng-bootstrap": "^9.0.2",
     "bootstrap": "^4.5.0",
+    "keycloak-angular": "^8.1.0",
+    "keycloak-js": "^12.0.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

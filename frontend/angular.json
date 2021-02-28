@@ -35,6 +35,14 @@
             "scripts": []
           },
           "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -70,6 +78,9 @@
             "browserTarget": "frontend:build"
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "frontend:build:dev"
+            },
             "production": {
               "browserTarget": "frontend:build:production"
             }

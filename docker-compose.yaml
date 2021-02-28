@@ -7,12 +7,21 @@ services:
     container_name: frontend
     ports:
       - 80:80
+    environment: 
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_REALM=test
+      - KEYCLOAK_CLIENT_ID=frontend
+      - BACKEND_BASE_PATH=http://backend:9000
+    depends_on:
+      - keycloak
+      - backend
+    
 
   backend:
     build: ./backend
     container_name: backend
     ports:
-      - 9000:8080
+      - 9000:9000
     environment: 
       - APP_NAME=movies-app
       - KEYCLOAK_URL=http://keycloak:8080
