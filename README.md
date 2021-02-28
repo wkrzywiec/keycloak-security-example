@@ -1,5 +1,6 @@
 # keycloak-security-example
 
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs) [![Main Branch workflow](https://github.com/wkrzywiec/keycloak-security-example/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/wkrzywiec/keycloak-security-example/actions/workflows/main.yaml)
 
 ### Edit hosts file
 JWT's payload contains a field **iss** (issuer). It's an URL of an authorization server, in our case Keycloak. In the backend application we need to provide exactly the same URL to the keycloak. But here is the problem that a Docker network and machine's hosts are not the same. From point of view of a backend service a keycloak will have different URL than from point of view of a user! 
