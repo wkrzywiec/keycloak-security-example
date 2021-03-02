@@ -9,8 +9,6 @@ import { environment } from '../../environments/environment';
 })
 export class ConfigInitService {
 
-  private readonly prodConfigFilePath = 'assets/config/config.json';
-  private readonly devConfigFilePath = 'assets/config/config.dev.json';
   private config: any;
 
   constructor(private httpClient: HttpClient) {}
@@ -36,6 +34,6 @@ export class ConfigInitService {
   }
 
   private getConfigFile(): string {
-    return environment.production ? this.prodConfigFilePath : this.devConfigFilePath;
+    return environment.configFile
   }
 }
