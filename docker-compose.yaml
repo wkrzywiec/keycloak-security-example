@@ -16,7 +16,6 @@ services:
       - keycloak
       - backend
     
-
   backend:
     build: ./backend
     container_name: backend
