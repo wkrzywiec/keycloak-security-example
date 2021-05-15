@@ -104,6 +104,6 @@ To run them use on of the following commands:
 ## Articles
 
 * [Introduction to OAuth 2.0](https://medium.com/nerd-for-tech/introduction-to-oauth-2-0-7aa885a3db36)
-* Create and configure Keycloak OAuth 2.0 authorization server (soon)
-* Implementing OAuth 2.0 access token validation with Spring Security (soon)
-* Step-by-step guide how integrate Keycloak with Angular application (soon  )
+* [Create and configure Keycloak OAuth 2.0 authorization server](https://wkrzywiec.medium.com/create-and-configure-keycloak-oauth-2-0-authorization-server-f75e2f6f6046)
+* [Implementing OAuth 2.0 access token validation with Spring Security](https://wkrzywiec.medium.com/implementing-oauth-2-0-access-token-validation-with-spring-security-64c797b42b36)
+* [Step-by-step guide how integrate Keycloak with Angular application](https://wkrzywiec.medium.com/step-by-step-guide-how-integrate-keycloak-with-angular-application-d96b05f7dfdd)
