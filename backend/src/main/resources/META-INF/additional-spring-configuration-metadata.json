@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.ignored",
+      "type": "java.lang.String",
+      "description": "Description for spring.security.ignored."
+  }
+] }

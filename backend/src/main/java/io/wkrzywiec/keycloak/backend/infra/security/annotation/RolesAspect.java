@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Aspect
 @Component
@@ -32,7 +31,7 @@ public class RolesAspect {
 
         List<String> roles = grantedAuthorities.stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .toList();
 
         if (!roles.containsAll(Arrays.asList(expectedRoles))) {
             throw new AccessDeniedException(String.format("Unauthorized request. Expected to have %s roles, but have %s", Arrays.asList(expectedRoles), roles));
