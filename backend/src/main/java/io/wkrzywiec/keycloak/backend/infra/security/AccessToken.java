@@ -5,8 +5,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -19,15 +17,11 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Objects.isNull;
 
-@RequiredArgsConstructor
-@ToString
-public class AccessToken {
+public record AccessToken(String value) {
 
     public static final String BEARER = "Bearer ";
 
-    private final String value;
-
-    public String getValueAsString() {
+    public String getValue() {
         return value;
     }
 
@@ -35,7 +29,7 @@ public class AccessToken {
         JsonObject payloadAsJson = getPayloadAsJsonObject();
 
         return StreamSupport.stream(
-                payloadAsJson.getAsJsonObject("realm_access").getAsJsonArray("roles").spliterator(), false)
+                        payloadAsJson.getAsJsonObject("realm_access").getAsJsonArray("roles").spliterator(), false)
                 .map(JsonElement::getAsString)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
@@ -45,7 +39,7 @@ public class AccessToken {
         JsonObject payloadAsJson = getPayloadAsJsonObject();
 
         return Optional.ofNullable(
-                payloadAsJson.getAsJsonPrimitive("preferred_username").getAsString())
+                        payloadAsJson.getAsJsonPrimitive("preferred_username").getAsString())
                 .orElse("");
     }
 
@@ -55,7 +49,7 @@ public class AccessToken {
     }
 
     private DecodedJWT decodeToken(String value) {
-        if (isNull(value)){
+        if (isNull(value)) {
             throw new InvalidTokenException("Token has not been provided");
         }
         return JWT.decode(value);
@@ -67,7 +61,7 @@ public class AccessToken {
             return new Gson().fromJson(
                     new String(Base64.getDecoder().decode(payloadAsString), StandardCharsets.UTF_8),
                     JsonObject.class);
-        }   catch (RuntimeException exception){
+        } catch (RuntimeException exception) {
             throw new InvalidTokenException("Invalid JWT or JSON format of each of the jwt parts", exception);
         }
     }

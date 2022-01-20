@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MovieControllerSecurityE2ETest {
 
     @Container
-    private static GenericContainer keycloak = new GenericContainer(DockerImageName.parse("jboss/keycloak:11.0.2"))
+    private static final GenericContainer keycloak = new GenericContainer(DockerImageName.parse("jboss/keycloak:11.0.2"))
             .withExposedPorts(8080)
             .withEnv("KEYCLOAK_USER", "admin")
             .withEnv("KEYCLOAK_PASSWORD", "admin")
@@ -96,7 +96,7 @@ public class MovieControllerSecurityE2ETest {
 
         String username = role.equals("ADMIN") ? "han" : "luke";
 
-        String keycloakUrl = "http://" + keycloak.getHost() + ":" + keycloak.getMappedPort(8080) + "/auth/realms/test";
+        @SuppressWarnings("HttpUrlsUsage") String keycloakUrl = "http://" + keycloak.getHost() + ":" + keycloak.getMappedPort(8080) + "/auth/realms/test";
 
         Map<String, String> formParams = Map.of(
                 "grant_type", "password",
@@ -129,6 +129,7 @@ public class MovieControllerSecurityE2ETest {
         @Bean
         @Primary
         public JwkProvider keycloakJwkProvider() {
+            @SuppressWarnings("HttpUrlsUsage")
             String jwkUrl = "http://" + keycloak.getHost() + ":" + keycloak.getMappedPort(8080) + "/auth/realms/test" + "/protocol/openid-connect/certs";
             return new KeycloakJwkProvider(jwkUrl);
         }

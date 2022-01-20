@@ -45,7 +45,7 @@ class JwtTokenValidatorSpec extends Specification {
         def accessToken = validator.validateAuthorizationHeader(AccessToken.BEARER + token)
 
         then: "AccessToken has been created"
-        accessToken.valueAsString == token
+        accessToken.value == token
     }
 
     def "AccessToken with incorrect signature"() {
