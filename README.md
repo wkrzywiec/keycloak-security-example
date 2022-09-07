@@ -78,8 +78,8 @@ In default Keycloak configurarion there is one realm defined - `test` that has t
 
 | Username  | Password | Roles   |
 | --------- | -------- | ------- |
-| luke      | Password | VISITOR |
-| han       | Password | ADMIN   |
+| luke      | password | VISITOR |
+| han       | password | ADMIN   |
 
 
 To enter the Keyclaok admin page use `http://localhost:8080` url where credentials are `admin` (both for username and password).
